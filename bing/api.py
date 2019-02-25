@@ -19,6 +19,9 @@ class BingWebmasterApi:
 
     def __getattr__(self, item):
         def call(**kwargs):
+            kwargs.update({
+                'apikey': self.api_key
+            })
             _uri = '{endpoint}{function}?{query}'.format(
                 endpoint=self.endpoint,
                 function=item,

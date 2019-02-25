@@ -40,5 +40,4 @@ coverage.xml
 api_dockerdata/
 
 # Ignore config and data
-configs/config.py
-data
+config/config.py
