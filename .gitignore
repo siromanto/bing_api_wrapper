@@ -41,3 +41,4 @@ api_dockerdata/
 
 # Ignore config and data
 config/config.py
+data
