@@ -12,7 +12,7 @@ from config import config
 
 class BingWebmasterApi:
 
-    def __init__(self, api_key=None, timeout=8):
+    def __init__(self, api_key=None, timeout=15):
         self.api_key = api_key or config.API_KEY
         self.endpoint = 'https://www.bing.com/webmaster/api.svc/json/'
         self.h = httplib2.Http("/tmp/.cache", timeout=timeout)

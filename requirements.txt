@@ -1,3 +1,3 @@
-httplib2
-snowflake
-pandas
+httplib2=0.12
+snowflake=0.0.3
+pandas=0.24

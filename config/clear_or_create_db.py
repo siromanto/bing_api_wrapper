@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import snowflake.connector
 
-from config import config
+from configs import config
 
 
 def create_connector():
@@ -28,9 +28,9 @@ def run():
 
         cs.execute(
             "CREATE OR REPLACE TABLE "
-            "LINKEDIN_AD_PERFORMANCE_TRAFFICBYDAY({})".format(config.AD_PERFORMANCE_DB_COLUMNS))
+            "BING_WEBMASTER_QUERY_STATS({})".format(config.QUERY_STATS_DB_COLUMNS))
 
-        print(f'Database LINKEDIN_AD_PERFORMANCE_TRAFFICBYDAY successfully created or cleared')
+        print(f'Database BING_WEBMASTER_QUERY_STATS successfully created or cleared')
     finally:
         cs.close()
     ctx.close()
