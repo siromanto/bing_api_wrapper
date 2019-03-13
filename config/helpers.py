@@ -1,23 +1,24 @@
 import json, os
 from datetime import timedelta, datetime
-from . import config
-
+import re
+import time
+import csv
 import snowflake.connector as connector
 
+from . import config
 
 
-DATETIME_FORMAT = '%m/%d/%Y'
+# DATETIME_FORMAT = '%m/%d/%Y'
 
 CSV_COLUMNS = ['SOURCE', 'DATE', 'TARGET_URL', 'TOTAL_PAGE_AVG_CLICK_POSITION', 'TOTAL_PAGE_AVG_IMPRESSION_POSITION',
                'TOTAL_PAGE_CLICS', 'TOTAL_PAGE_IMPRESSIONS', 'QUERY_AVG_CLICK_POSITION',
-               'QUERY_AVG_IMPRESSION_POSITION',
-               'QUERY_CLICKS', 'QUERY_IMPRESSIONS', 'QUERY']
+               'QUERY_AVG_IMPRESSION_POSITION', 'QUERY_CLICKS', 'QUERY_IMPRESSIONS', 'QUERY']
 
 
-def normalize_backfill_start_end_time(start_date, end_date):
-    end_time = (end_date + timedelta(days=1) - timedelta(seconds=1)).strftime(DATETIME_FORMAT)
-    start_time = start_date.strftime(DATETIME_FORMAT)
-    return start_time, end_time
+# def normalize_backfill_start_end_time(start_date, end_date):
+#     end_time = (end_date + timedelta(days=1) - timedelta(seconds=1)).strftime(DATETIME_FORMAT)
+#     start_time = start_date.strftime(DATETIME_FORMAT)
+#     return start_time, end_time
 
 
 def establish_db_conn(user, password, account, db, warehouse):
@@ -62,3 +63,14 @@ def print_header(name):
 def get_data_by_chunks(items_list, n):
     for i in range(0, len(items_list), n):
         yield items_list[i:i + n]
+
+
+def parse_date(string_date):
+    a = re.search(r'\d+', string_date)
+    timestamp = a.group(0)
+    return time.strftime("%Y-%m-%d", time.gmtime(int(timestamp) / 1000.0))
+
+def prepare_header_for_clear_csv(file, headers):
+    writer = csv.DictWriter(file, fieldnames=headers)
+    writer.writeheader()
+    return writer
