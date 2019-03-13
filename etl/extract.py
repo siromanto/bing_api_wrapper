@@ -7,7 +7,7 @@ import time
 import pandas as pd
 
 from bing.api import BingWebmasterApi
-from config import config
+from config import config, helpers
 
 api = BingWebmasterApi()
 url = 'www.snowflake.com'
@@ -33,6 +33,16 @@ def prepare_header_for_clear_csv(file, headers):
     return writer
 
 
+def parse_date(string_date):
+    a = re.search(r'\d+', string_date)
+    timestamp = a.group(0)
+    return time.strftime("%Y-%m-%d", time.gmtime(int(timestamp) / 1000.0))
+
+
+def extrract_weekly():
+    pass
+
+
 # def extract_data(endpoint_name):
 #     data = getattr(api, endpoint_name)(**endpoint_args.get(endpoint_name))
 #     raw_data = data['d']
@@ -56,25 +66,16 @@ def prepare_header_for_clear_csv(file, headers):
 
 """
 
-def extract_pages_with_stats():
+def extract_data():
     aggregated_data = []
     pages_raw_data = api.GetPageStats(siteUrl=config.BING_SITE_URL)
 
-    target_pages = [x.get('Query') for x in pages_raw_data.get('d')]
+    # target_pages = [x.get('Query') for x in pages_raw_data.get('d')]
     global_info_pages = {x.get('Query'): x for x in pages_raw_data.get('d')}
 
     with open(f'../data/{"Get_Page_Query_Stats".lower()}.csv', mode='w', encoding='utf8') as raw_csv:
         writer = prepare_header_for_clear_csv(
-            raw_csv,
-            ['SOURCE', 'DATE', 'TARGET_URL', 'TOTAL_PAGE_AVG_CLICK_POSITION', 'TOTAL_PAGE_AVG_IMPRESSION_POSITION',
-             'TOTAL_PAGE_CLICS', 'TOTAL_PAGE_IMPRESSIONS', 'QUERY_AVG_CLICK_POSITION', 'QUERY_AVG_IMPRESSION_POSITION',
-             'QUERY_CLICKS', 'QUERY_IMPRESSIONS', 'QUERY'])
-
-        # ['source', 'date', 'target_url', 'total_page_avg_click_position', 'total_page_avg_impression_position',
-        #  'total_page_clics', 'total_page_impressions', 'query_avg_click_position', 'query_avg_impression_position',
-        #  'query_clicks', 'query_impressions', 'query']
-        # )
-
+            raw_csv, helpers.CSV_COLUMNS)
 
         for target_page, page_data in global_info_pages.items():
             page_detailed_info = api.GetPageQueryStats(siteUrl=config.BING_SITE_URL, page=target_page).get('d')
@@ -107,7 +108,7 @@ def extract_pages_with_stats():
                     row.update({
                         'QUERY_AVG_CLICK_POSITION': detailed_info.get('AvgClickPosition'),
                         'QUERY_AVG_IMPRESSION_POSITION': detailed_info.get('AvgImpressionPosition'),
-                        'DATE': parce_date(detailed_info.get('Date')),
+                        'DATE': parse_date(detailed_info.get('Date')),
                         'QUERY_CLICKS': detailed_info.get('Clicks'),
                         'QUERY_IMPRESSIONS': detailed_info.get('Impressions'),
                         'QUERY': detailed_info.get('Query')
@@ -123,7 +124,7 @@ def extract_pages_with_stats():
 
                     # print(aggregated_data)
             else:
-                row.update(DATE=parce_date(page_data.get('Date')))
+                row.update(DATE=parse_date(page_data.get('Date')))
                 # aggregated_data.append(row)
                 writer.writerow(row)
 
@@ -132,28 +133,7 @@ def extract_pages_with_stats():
         print(aggregated_data)
 
 
-            # print(page_detailed_info.get('d'))
 
-
-
-    print('test')
-
-def parce_date(string_date):
-    a = re.search(r'\d+', string_date)
-    timestamp = a.group(0)
-
-    correct_format = time.strftime("%Y-%m-%d", time.gmtime(int(timestamp) / 1000.0))
-    return correct_format
-
-
-
-
-def extract_page_query_stats(target_url):
-    pass
-
-
-def extract_data():
-    extract_pages_with_stats()
 
 
 if __name__ == '__main__':

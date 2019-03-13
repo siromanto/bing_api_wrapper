@@ -8,6 +8,11 @@ import snowflake.connector as connector
 
 DATETIME_FORMAT = '%m/%d/%Y'
 
+CSV_COLUMNS = ['SOURCE', 'DATE', 'TARGET_URL', 'TOTAL_PAGE_AVG_CLICK_POSITION', 'TOTAL_PAGE_AVG_IMPRESSION_POSITION',
+               'TOTAL_PAGE_CLICS', 'TOTAL_PAGE_IMPRESSIONS', 'QUERY_AVG_CLICK_POSITION',
+               'QUERY_AVG_IMPRESSION_POSITION',
+               'QUERY_CLICKS', 'QUERY_IMPRESSIONS', 'QUERY']
+
 
 def normalize_backfill_start_end_time(start_date, end_date):
     end_time = (end_date + timedelta(days=1) - timedelta(seconds=1)).strftime(DATETIME_FORMAT)
