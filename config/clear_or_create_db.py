@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import snowflake.connector
 
-from configs import config
+import config
 
 
 def create_connector():

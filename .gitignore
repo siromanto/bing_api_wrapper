@@ -41,4 +41,6 @@ api_dockerdata/
 
 # Ignore config and data
 config/config.py
+config/BingConsole.json
+config/Siromanto_account.json
 data
