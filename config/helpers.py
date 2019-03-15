@@ -32,6 +32,17 @@ def establish_db_conn(user, password, account, db, warehouse):
     return conn
 
 
+def get_client_config(conf_path, client_name=None):
+    if client_name is None:
+        with open(conf_path, 'r') as f:
+            conf = json.load(f)
+    else:
+        with open(conf_path, 'r') as f:
+            conf = json.load(f).get(client_name)
+    assert conf is not None
+    return conf
+
+
 def perform_db_routines(client_name, sql):
     # configfile = get_resource_path()[0]
 
@@ -69,6 +80,7 @@ def parse_date(string_date):
     a = re.search(r'\d+', string_date)
     timestamp = a.group(0)
     return time.strftime("%Y-%m-%d", time.gmtime(int(timestamp) / 1000.0))
+
 
 def prepare_header_for_clear_csv(file, headers):
     writer = csv.DictWriter(file, fieldnames=headers)
