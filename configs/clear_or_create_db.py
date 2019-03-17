@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import snowflake.connector
 
-import config
+from configs import config, helpers
 
 
 def create_connector():
@@ -14,7 +14,7 @@ def create_connector():
     return ctx
 
 
-def run():
+def run(table_name, table_columns):
     ctx = create_connector()
     cs = ctx.cursor()
 
@@ -28,13 +28,14 @@ def run():
 
         cs.execute(
             "CREATE OR REPLACE TABLE "
-            "BING_WEBMASTER_QUERY_STATS({})".format(config.QUERY_STATS_DB_COLUMNS))
+            "{}({})".format(table_name, table_columns))
 
-        print(f'Database BING_WEBMASTER_QUERY_STATS successfully created or cleared')
+        print(f'Database {table_name} successfully created or cleared')
     finally:
         cs.close()
     ctx.close()
 
 
 if __name__ == '__main__':
-    run()
+    run(table_name='BING_WEBMASTER_QUERY_STATS', table_columns=helpers.QUERY_STATS_DB_COLUMNS)
+    run(table_name='GAAN_V16_TRAFFICBYDAY_TEST', table_columns=helpers.V16_DB_COLUMNS)

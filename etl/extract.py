@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from bing.api import BingWebmasterApi
-from config import config, helpers
+from configs import config, helpers
 
 
 def extract_weekly():

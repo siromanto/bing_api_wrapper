@@ -3,7 +3,7 @@
 import os
 import pandas as pd
 
-from config import config, helpers
+from configs import config, helpers
 
 
 def _execute_queries_for_upload(curr, report_path, storage_path, table_name):

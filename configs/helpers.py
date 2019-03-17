@@ -15,6 +15,90 @@ CSV_COLUMNS = ['SOURCE', 'DATE', 'TARGET_URL', 'TOTAL_PAGE_AVG_CLICK_POSITION', 
                'QUERY_AVG_IMPRESSION_POSITION', 'QUERY_CLICKS', 'QUERY_IMPRESSIONS', 'QUERY']
 
 
+QUERY_STATS_DB_COLUMNS = \
+    """SOURCE string, 
+    DATE date, 
+    TARGET_URL string,
+    TOTAL_PAGE_AVG_CLICK_POSITION integer,
+    TOTAL_PAGE_AVG_IMPRESSION_POSITION integer,
+    TOTAL_PAGE_CLICS integer,
+    TOTAL_PAGE_IMPRESSIONS integer,
+    QUERY_AVG_CLICK_POSITION integer,
+    QUERY_AVG_IMPRESSION_POSITION integer,
+    QUERY_CLICKS integer,
+    QUERY_IMPRESSIONS integer, 
+    QUERY string
+    """
+
+V16_DB_COLUMNS = \
+    """
+    DATE date, 
+    PROVIDER string, 
+    MEDIUM string,
+    CHANNELGROUPING string, 
+    DEVICECATEGORY string,
+    KEYWORD string,
+    FULLURL string,
+    ADCLICKS integer,
+    IMPRESSIONS integer,
+    ISDATAGOLDEN varchar,
+    LANDINGPAGEPATH string,
+    SOURCE string,
+    CAMPAIGN string,
+    ADGROUP string,
+    SUBCHANNEL string,
+    PROFILEID integer,
+    CAMPAIGNSTATUS string,
+    ADGROUPSTATUS string,
+    ADSTATUS string,
+    ADCONTENT string,
+    PROVIDERCAMPAIGN string,
+    EMAILCAMPAIGN string,
+    BOUNCES integer,
+    TRANSACTIONS integer,
+    SESSIONS integer,
+    SESSIONDURATION integer,
+    USERS integer,
+    NEWUSERS integer,
+    TRANSACTIONREVENUE integer,
+    PAGEVIEWS integer,
+    ADCOST integer,
+    IMPRESSIONSHARE varchar,
+    SAMPLINGLEVEL string,
+    EMAILCLICKS integer,
+    EMAILOPENS integer,
+    EMAILUNIQUESENDS integer,
+    EMAILSENDS integer,
+    EMAILHARDBOUNCES integer,
+    EMAILSOFTBOUNCES integer,
+    EMAILOTHERBOUNCES integer,
+    EMAILUNSUBSCRIBES integer,
+    VIDEOVIEWS integer,
+    
+    goal1completions integer,
+    goal2completions integer,
+    goal3completions integer,
+    goal4completions integer,
+    goal5completions integer,
+    goal6completions integer,
+    goal7completions integer,
+    goal8completions integer,
+    goal9completions integer,
+    goal10completions integer,
+    goal11completions integer,
+    goal12completions integer,
+    goal13completions integer,
+    goal14completions integer,
+    goal15completions integer,
+    goal16completions integer,
+    goal17completions integer,
+    goal18completions integer,
+    goal19completions integer,
+    goal20completions integer
+    """
+
+
+
 # def normalize_backfill_start_end_time(start_date, end_date):
 #     end_time = (end_date + timedelta(days=1) - timedelta(seconds=1)).strftime(DATETIME_FORMAT)
 #     start_time = start_date.strftime(DATETIME_FORMAT)
