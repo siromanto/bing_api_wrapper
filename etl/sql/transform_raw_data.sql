@@ -1,0 +1,103 @@
+CREATE OR REPLACE TEMPORARY TABLE {traffic_by_day_table} AS
+(SELECT 'BingWebmaster' as PROVIDER,
+DATE as SEARCHDATE,
+'organic' as MEDIUM,
+'Organic Search' as CHANNELGROUPING,
+'bing' as  SOURCE,
+QUERY as KEYWORD,
+TARGET_URL as FULLURL,
+right(
+  right(FULLURL, LENGTH(FULLURL)-(position('//' in FULLURL)+1))
+  ,LENGTH(right(FULLURL, LENGTH(FULLURL)-(position('//' in FULLURL)+1)))
+  -(position('/' in right(FULLURL, LENGTH(FULLURL)-(position('//' in FULLURL)+1))))+1) as LANDINGPAGEPATH,
+case when QUERY IS NULL then TOTAL_PAGE_CLICS else QUERY_CLICKS end as ADCLICKS,
+case when QUERY IS NULL then TOTAL_PAGE_IMPRESSIONS else QUERY_IMPRESSIONS end as IMPRESSIONS,
+True as ISDATAGOLDEN
+from {db_table_raw} t1
+order by SEARCHDATE);
+
+
+INSERT INTO {prod_table_traffic_by_day}
+(DATE,
+PROVIDER,
+MEDIUM,
+CHANNELGROUPING,
+DEVICECATEGORY,
+KEYWORD,
+FULLURL,
+ADCLICKS,
+IMPRESSIONS,
+ISDATAGOLDEN,
+LANDINGPAGEPATH,
+SOURCE,
+
+CAMPAIGN,
+ADGROUP,
+SUBCHANNEL,
+PROFILEID,
+CAMPAIGNSTATUS,
+ADGROUPSTATUS,
+ADSTATUS,
+ADCONTENT,
+PROVIDERCAMPAIGN,
+EMAILCAMPAIGN,
+BOUNCES,
+TRANSACTIONS,
+SESSIONS,
+SESSIONDURATION,
+USERS,
+NEWUSERS,
+TRANSACTIONREVENUE,
+PAGEVIEWS,
+ADCOST,
+IMPRESSIONSHARE,
+SAMPLINGLEVEL,
+EMAILCLICKS,
+EMAILOPENS,
+EMAILUNIQUESENDS,
+EMAILSENDS,
+EMAILHARDBOUNCES,
+EMAILSOFTBOUNCES,
+EMAILOTHERBOUNCES,
+EMAILUNSUBSCRIBES,
+VIDEOVIEWS,
+
+goal1completions,
+goal2completions,
+goal3completions,
+goal4completions,
+goal5completions,
+goal6completions,
+goal7completions,
+goal8completions,
+goal9completions,
+goal10completions,
+goal11completions,
+goal12completions,
+goal13completions,
+goal14completions,
+goal15completions,
+goal16completions,
+goal17completions,
+goal18completions,
+goal19completions,
+goal20completions
+)
+select
+SEARCHDATE,
+PROVIDER,
+MEDIUM,
+CHANNELGROUPING,
+'',
+KEYWORD,
+FULLURL,
+ADCLICKS,
+IMPRESSIONS,
+True,
+LANDINGPAGEPATH,
+SOURCE,
+
+'','','',0,'','','','','','',0,0,0,0,0,0,0,0,0,'','',0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+FROM {traffic_by_day_table}
+where SEARCHDATE >= '2018-02-22';

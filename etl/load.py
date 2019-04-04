@@ -20,14 +20,15 @@ def load_data():
 
 
 def load_weekly():
-    pass
+    report_path = config.DATA_PATH
+    load_raw_data_from_csv(report_path)
 
 
 def load_raw_data_from_csv(file_path):
     file_name = file_path.rsplit('/', 1)[-1]
 
-    client_config = helpers.get_client_config(r'/Users/siromanto/ralabs/0.projects/conDati/BingAds/config/BingConsole.json')
-    db_config = helpers.get_client_config('../config/Siromanto_account.json')
+    client_config = helpers.get_client_config(r'/Users/siromanto/ralabs/0.projects/conDati/BingSearchConsole/configs/BingConsole.json')
+    db_config = helpers.get_client_config('../configs/Siromanto_account.json')
 
     # client_config = helpers.get_client_config(r'/opt/workbench/users/afuser/airflow/dags/credentials/BingConsole/Toweltech.json')
     # db_config = helpers.get_client_config('credentials/SnowflakeKeys/CONDATI ----> .json')
@@ -41,10 +42,15 @@ def load_raw_data_from_csv(file_path):
     )
 
     curr = conn.cursor()
-    table_name = client_config['raw_table']
+    table_name = client_config['raw_db_table']
+    table_columns = helpers.QUERY_STATS_DB_COLUMNS
 
     storage_path = '@%{}/{}'.format(table_name, file_name)
     try:
+        # Every time we load all data and need to clear the table
+        print('CLEAN UP {} TABLE...'.format(table_name))
+        curr.execute("TRUNCATE TABLE IF EXISTS {}".format(table_name))
+
         curr.execute('BEGIN')
         # _cleanup_data(curr, table_name)
         _execute_queries_for_upload(curr, file_path, storage_path, table_name)
@@ -62,4 +68,4 @@ def load_raw_data_from_csv(file_path):
 
 
 if __name__ == '__main__':
-    load_data()
+    load_weekly()

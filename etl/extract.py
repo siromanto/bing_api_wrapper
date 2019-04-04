@@ -9,10 +9,11 @@ def extract_weekly():
 
 
 def extract_data():
-    credentials = helpers.get_client_config(conf_path=r'/Users/siromanto/ralabs/0.projects/conDati/BingAds/config/BingConsole.json')
+    credentials = helpers.get_client_config(conf_path=r'/Users/siromanto/ralabs/0.projects/conDati/BingSearchConsole/configs/BingConsole.json')
     # credentials = helpers.get_client_config(conf_path=r'/opt/workbench/users/afuser/airflow/dags/credentials/AmazonAdsKeys/Toweltech.json')
 
     api = BingWebmasterApi(api_key=credentials["api_key"])
+
     pages_raw_data = api.GetPageStats(siteUrl=credentials["bing_site_url"])
 
     global_info_pages = {x.get('Query'): x for x in pages_raw_data.get('d')}

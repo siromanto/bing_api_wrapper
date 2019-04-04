@@ -5,8 +5,6 @@ import time
 import csv
 import snowflake.connector as connector
 
-from . import config
-
 
 # DATETIME_FORMAT = '%m/%d/%Y'
 
@@ -131,11 +129,14 @@ def perform_db_routines(client_name, sql):
     # configfile = get_resource_path()[0]
 
     # client_config = get_client_config(client_name, configfile)
-    conn = establish_db_conn(config.SNOWFLAKE_DB_USERNAME,
-                             config.SNOWFLAKE_DB_PASSWORD,
-                             config.SNOWFLAKE_DB_ACCOUNT,
-                             config.SNOWFLAKE_DATABASE,
-                             config.SNOWFLAKE_WAREHOUSE)
+    client_config = get_client_config(r'/Users/siromanto/ralabs/0.projects/conDati/BingSearchConsole/configs/BingConsole.json')
+    config_db = get_client_config('/Users/siromanto/ralabs/0.projects/conDati/BingSearchConsole/configs/Siromanto_account.json')
+
+    conn = establish_db_conn(config_db['user'],
+                              config_db['pwd'],
+                              config_db['account'],
+                              client_config['raw_db'],
+                              client_config['warehouse'])
     conn.autocommit(False)
     curr = conn.cursor()
     queries_list = sql.split(';')
@@ -147,12 +148,6 @@ def perform_db_routines(client_name, sql):
     finally:
         curr.close()
         conn.close()
-
-
-def print_header(name):
-    print('*' * 200)
-    print(f'PREPARE FILES TO LOAD --- {name.upper()}')
-    print('*' * 200)
 
 
 def get_data_by_chunks(items_list, n):
