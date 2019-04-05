@@ -40,8 +40,5 @@ coverage.xml
 api_dockerdata/
 
 # Ignore config and data
-configs/*.json
-configs/config.py
-configs/BingConsole.json
-configs/Siromanto_account.json
+credentials
 data
