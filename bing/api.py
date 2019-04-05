@@ -7,8 +7,6 @@ import httplib2
 import json
 from urllib.parse import urlencode
 
-from configs import config
-
 
 class BingWebmasterApi:
 
@@ -42,6 +40,6 @@ class BingWebmasterApi:
                         print('Not authorized.')
                 raise print('Unknown error occured [status code: %d] with response: %s' % (resp.status, content))
             else:
-                return json.loads(content)
+                return json.loads(content.decode('utf-8'))
 
         return call
