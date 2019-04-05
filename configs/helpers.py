@@ -1,12 +1,9 @@
-import json, os
-from datetime import timedelta, datetime
+import json
 import re
 import time
 import csv
 import snowflake.connector as connector
 
-
-# DATETIME_FORMAT = '%m/%d/%Y'
 
 CSV_COLUMNS = ['SOURCE', 'DATE', 'TARGET_URL', 'TOTAL_PAGE_AVG_CLICK_POSITION', 'TOTAL_PAGE_AVG_IMPRESSION_POSITION',
                'TOTAL_PAGE_CLICS', 'TOTAL_PAGE_IMPRESSIONS', 'QUERY_AVG_CLICK_POSITION',
@@ -96,7 +93,6 @@ V16_DB_COLUMNS = \
     """
 
 
-
 # def normalize_backfill_start_end_time(start_date, end_date):
 #     end_time = (end_date + timedelta(days=1) - timedelta(seconds=1)).strftime(DATETIME_FORMAT)
 #     start_time = start_date.strftime(DATETIME_FORMAT)
@@ -125,18 +121,13 @@ def get_client_config(conf_path, client_name=None):
     return conf
 
 
-def perform_db_routines(client_name, sql):
-    # configfile = get_resource_path()[0]
+def perform_db_routines(sql, client_config, db_config):
 
-    # client_config = get_client_config(client_name, configfile)
-    client_config = get_client_config(r'/Users/siromanto/ralabs/0.projects/conDati/BingSearchConsole/configs/BingConsole.json')
-    config_db = get_client_config('/Users/siromanto/ralabs/0.projects/conDati/BingSearchConsole/configs/Siromanto_account.json')
-
-    conn = establish_db_conn(config_db['user'],
-                              config_db['pwd'],
-                              config_db['account'],
-                              client_config['raw_db'],
-                              client_config['warehouse'])
+    conn = establish_db_conn(db_config['user'],
+                             db_config['pwd'],
+                             db_config['account'],
+                             client_config['db'],
+                             client_config['warehouse'])
     conn.autocommit(False)
     curr = conn.cursor()
     queries_list = sql.split(';')

@@ -22,9 +22,6 @@ def initialize():
     pass
 
 
-with open('credentials/BingSearchConsoleKeys/BingConsole.json') as f:
-    client_conf = json.load(f)
-
 dag_name = 'BingSearchConsole.v0'
 dag = DAG(
     dag_name,
@@ -35,7 +32,7 @@ dag = DAG(
 
 extract_op = PythonOperator(task_id='extract_BingSearchConsole',
                             dag=dag,
-                            python_callable=extract.extract_weekly,
+                            python_callable=extract.extract_data,
                             trigger_rule='all_success',
                             provide_context=True,
                             # op_args=[client_name],
@@ -43,7 +40,7 @@ extract_op = PythonOperator(task_id='extract_BingSearchConsole',
 
 load_op = PythonOperator(task_id='load_BingSearchConsole',
                          dag=dag,
-                         python_callable=load.load_weekly,
+                         python_callable=load.load_data,
                          trigger_rule='all_success',
                          provide_context=True,
                          # op_args=[client_name],

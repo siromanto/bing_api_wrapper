@@ -2,30 +2,25 @@
 
 from bing.api import BingWebmasterApi
 from configs import config, helpers
+# from BingSearchConsole.bing.api import BingWebmasterApi
+# from BingSearchConsole.configs import config, helpers
 
 
-def extract_weekly():
-    extract_data()
-
-
-def extract_data():
-    credentials = helpers.get_client_config(conf_path=r'/Users/siromanto/ralabs/0.projects/conDati/BingSearchConsole/configs/BingConsole.json')
-    # credentials = helpers.get_client_config(conf_path=r'/opt/workbench/users/afuser/airflow/dags/credentials/AmazonAdsKeys/Toweltech.json')
-
+def extract_data(**kwargs):
+    credentials = helpers.get_client_config(conf_path=config.CLIENT_CONFIG_PATH)
     api = BingWebmasterApi(api_key=credentials["api_key"])
 
     pages_raw_data = api.GetPageStats(siteUrl=credentials["bing_site_url"])
-
     global_info_pages = {x.get('Query'): x for x in pages_raw_data.get('d')}
 
     with open(config.DATA_PATH, mode='w', encoding='utf8') as raw_csv:
         writer = helpers.prepare_header_for_clear_csv(raw_csv, helpers.CSV_COLUMNS)
-        print(f'find pages --- {len(global_info_pages)}')
+        print('find pages --- {}'.format(len(global_info_pages)))
 
         for target_page, page_data in global_info_pages.items():
             row = {}
             page_detailed_info = api.GetPageQueryStats(siteUrl=credentials["bing_site_url"], page=target_page).get('d')
-            print(f'Start working with url --- {target_page}...')
+            print('Start working with url --- {}...'.format(target_page))
 
             row.update({
                 'SOURCE': page_data.get('__type').split('#')[1],
@@ -42,7 +37,7 @@ def extract_data():
                 'QUERY': None
             })
 
-            print(f'Url has atached queries ---> {len(page_detailed_info)}')
+            print('Url has atached queries ---> {}'.format(len(page_detailed_info)))
             if page_detailed_info:
                 for detailed_info in page_detailed_info:
                     row.update({
@@ -60,4 +55,4 @@ def extract_data():
 
 
 if __name__ == '__main__':
-    extract_weekly()
+    extract_data()
